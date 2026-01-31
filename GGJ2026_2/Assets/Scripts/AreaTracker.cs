@@ -23,7 +23,7 @@ public class AreaTracker : MonoBehaviour
         }
 
         string areaName = GetAreaName();
-        Debug.Log("Current area: " + (string.IsNullOrEmpty(areaName) ? "<none>" : areaName));
+        //Debug.Log("Current area: " + (string.IsNullOrEmpty(areaName) ? "<none>" : areaName));
         nextDebugTime = Time.time + Mathf.Max(0.05f, debugInterval);
     }
 

@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Obstacle_A_Mat_02
-  m_Shader: {fileID: -6465566751694194690, guid: 202313c0668db104db58b04a706e9e5b,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 5d99ce80cab5f8c48b2b10f59e6da995, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -109,7 +108,9 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _EmissIntensity: 5
     - _EnvironmentReflections: 1
+    - _FlashBool: 1
     - _FlashSpeed: 2
     - _Flasher: 1
     - _GlossMapScale: 0
@@ -132,9 +133,10 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissColor: {r: 0.14901961, g: 0.627451, b: 0.5764706, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FlashSpeed: {r: 4, g: 1, b: 0, a: 0}
-    - _MainColor: {r: 0, g: 0.52444804, b: 0.62264144, a: 0}
+    - _FlashSpeed: {r: 2, g: 1, b: 0, a: 0}
+    - _MainColor: {r: 0.11698109, g: 0.11698109, b: 0.11698109, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TilingAndOffset: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

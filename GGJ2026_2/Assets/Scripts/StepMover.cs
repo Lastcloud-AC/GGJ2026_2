@@ -46,7 +46,9 @@ public class StepMover : MonoBehaviour
             && !maskController.IsPointInsideMaskXZ(probe.position, maskProbeMargin);
         if (wallBlocked || maskBlocked)
         {
+            AudioManager.Instance.PlaySfx("Bumped");
             yield return StartCoroutine(Bump(direction));
+            
             IsMoving = false;
             yield break;
         }
@@ -64,6 +66,9 @@ public class StepMover : MonoBehaviour
         }
 
         target.position = end;
+
+        AudioManager.Instance.PlaySfx("Move");
+
         if (stepPause > 0f)
         {
             yield return new WaitForSeconds(stepPause);

@@ -73,6 +73,7 @@ public class MaskController : MonoBehaviour
         }
 
         transform.position = targetCenter;
+        AudioManager.Instance.PlaySfx("MaskMovement");
         return true;
     }
 

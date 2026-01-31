@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class LevelManager : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class LevelManager : MonoBehaviour
     public QteSpriteDisplay qteDisplay;
     public MaskController maskController;
     public Transform goal;
+    public TMP_Text currentQueueText;
 
     [Header("Auto Move")]
     public Vector3 autoStepDirection = Vector3.forward;
@@ -33,6 +36,9 @@ public class LevelManager : MonoBehaviour
     [Header("Win Conditions")]
     public float goalRadius = 0.5f;
     public bool bossDefeated = false;
+
+    [Header("Restart")]
+    public float restartDelay = 1f;
 
     private LevelState state = LevelState.Intermission;
     private Vector3 autoMoveDirection = Vector3.forward;
@@ -46,6 +52,7 @@ public class LevelManager : MonoBehaviour
     private bool qtePauseActive = false;
     private float qteTimeRemaining = 0f;
     private bool qteTimerActive = false;
+    private bool restartQueued = false;
 
     void Start()
     {
@@ -108,9 +115,10 @@ public class LevelManager : MonoBehaviour
         areaTracker.RefreshCurrent();
         autoMoveDirection = autoStepDirection.normalized;
         previousTimeScale = Time.timeScale;
+        UpdateCurrentQueueText(string.Empty, null);
     }
 
-    // Update is called once per frame
+    // Update is called once per frameBumped
     void Update()
     {
         if (state == LevelState.LevelComplete)
@@ -193,7 +201,7 @@ public class LevelManager : MonoBehaviour
     {
         state = LevelState.QteInput;
         activeQteAreaName = areaName;
-
+        AudioManager.Instance.PlaySfx("NewAreaEntered");
         qteController.StartForArea(areaName);
         if (qteDisplay != null)
         {
@@ -253,6 +261,7 @@ public class LevelManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            AudioManager.Instance.PlaySfx("SpaceConfirm");
             state = LevelState.AutoMove;
         }
     }
@@ -307,6 +316,7 @@ public class LevelManager : MonoBehaviour
         {
             if (requireQteToUseAreaSequence && !qteCompletedAreas.Contains(areaName))
             {
+                UpdateCurrentQueueText(areaName, qteController.GetSequenceForArea(areaName));
                 return;
             }
 
@@ -315,6 +325,55 @@ public class LevelManager : MonoBehaviour
             {
                 currentMoveSequence.AddRange(sequence);
             }
+
+            UpdateCurrentQueueText(areaName, sequence);
+            return;
+        }
+
+        UpdateCurrentQueueText(string.Empty, null);
+    }
+
+    private void UpdateCurrentQueueText(string areaName, List<QteController.QteKey> sequence)
+    {
+        if (currentQueueText == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(areaName) || sequence == null || sequence.Count == 0)
+        {
+            currentQueueText.text = "Queue: Up";
+            return;
+        }
+
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Append("Queue: ");
+        for (int i = 0; i < sequence.Count; i++)
+        {
+            sb.Append(QteKeyToArrow(sequence[i]));
+            if (i < sequence.Count - 1)
+            {
+                sb.Append(" ");
+            }
+        }
+
+        currentQueueText.text = sb.ToString();
+    }
+
+    private static string QteKeyToArrow(QteController.QteKey key)
+    {
+        switch (key)
+        {
+            case QteController.QteKey.W:
+                return "↑";
+            case QteController.QteKey.A:
+                return "←";
+            case QteController.QteKey.S:
+                return "↓";
+            case QteController.QteKey.D:
+                return "→";
+            default:
+                return "?";
         }
     }
 
@@ -336,6 +395,7 @@ public class LevelManager : MonoBehaviour
 
     private void StartQteTimer()
     {
+        AudioManager.Instance.PlaySfx("CountDown");
         qteTimeRemaining = Mathf.Max(0.1f, qteTimeLimit);
         qteTimerActive = true;
         SetQteTimerVisible(true);
@@ -385,7 +445,29 @@ public class LevelManager : MonoBehaviour
 
     public void RestartLevel()
     {
+        if (restartQueued)
+        {
+            return;
+        }
+
+        AudioManager.Instance.PlaySfx("Dead");
+        Debug.Log("DEADPLAYED");
+
+        if (restartDelay <= 0f)
+        {
+            SetQtePause(false);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            return;
+        }
+
+        StartCoroutine(RestartLevelAfterDelay());
+    }
+
+    private IEnumerator RestartLevelAfterDelay()
+    {
+        restartQueued = true;
         SetQtePause(false);
+        yield return new WaitForSecondsRealtime(restartDelay);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

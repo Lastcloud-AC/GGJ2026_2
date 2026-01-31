@@ -106,12 +106,16 @@ public class QteController : MonoBehaviour
         switch (key)
         {
             case QteKey.W:
+                AudioManager.Instance.PlaySfx("QTE_A");
                 return input == KeyCode.W;
             case QteKey.A:
+                AudioManager.Instance.PlaySfx("QTE_B");
                 return input == KeyCode.A;
             case QteKey.S:
+                AudioManager.Instance.PlaySfx("QTE_C");
                 return input == KeyCode.S;
             default:
+                AudioManager.Instance.PlaySfx("QTE_D");
                 return input == KeyCode.D;
         }
     }

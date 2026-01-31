@@ -33,20 +33,8 @@ Shader "Custom/MaskErvi" {
             float4 _MainColor;
             float4 _EmissColor;
             float _EmissIntensity;
-            
-            // 引用内置的GradientNoise函数
-            float unity_gradientNoise(float2 p) {
-                // 此函数实现梯度噪声，返回范围约为[-0.5, 0.5]
-                p = p % 289;
-                float x = (34 * p.x + 1) * p.x % 289 + p.y;
-                x = (34 * x + 1) * x % 289;
-                x = frac(x / 41) * 2 - 1;
-                return normalize(float2(x - floor(x + 0.5), abs(x) - 0.5));
-            }
-            
-            float GradientNoise(float2 UV, float Scale) {
-                return unity_gradientNoise(UV * Scale) + 0.5;
-            }
+            float4 _FlashSpeed;
+            int _FlashBool;
             
             // 顶点着色器的输入结构
             struct Attributes {
@@ -65,18 +53,7 @@ Shader "Custom/MaskErvi" {
             // 顶点着色器
             Varyings vert(Attributes v) {
                 Varyings o;
-                
-                // 将顶点位置和法线从模型空间变换到世界空间
                 float3 worldPos = TransformObjectToWorld(v.positionOS.xyz);
-                float3 worldNormal = TransformObjectToWorldNormal(v.normalOS);
-                
-                // 基于世界坐标生成噪声[2](@ref)
-                float2 noiseUV = worldPos.xz; // 使用世界XZ平面作为噪声输入
-                
-                
-                
-             
-                // 将偏移后的世界坐标变换到裁剪空间
                 o.positionCS = TransformWorldToHClip(worldPos);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = worldPos;
@@ -87,8 +64,16 @@ Shader "Custom/MaskErvi" {
             // 片元着色器
             half4 frag(Varyings i) : SV_Target {
                 // 采样纹理
-                half4 col = tex2D(_MainTex, i.uv) ;
-                return col;
+                half Gray = tex2D(_MainTex, i.uv) ;
+                float3 Diffuse=(1-Gray)*_MainColor;
+                float Flash=1;
+                if(_FlashBool==1)
+                {
+                    Flash=sin(_Time.y*_FlashSpeed.x)+_FlashSpeed.y;
+                }
+                float3 Emiss=Gray*Flash*_EmissColor*_EmissIntensity;
+                float3 finalcolor=Emiss+Diffuse;
+                return half4(finalcolor,1.0);
             }
             ENDHLSL
         }

@@ -102,7 +102,7 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _ColorIntensity: 10.4
+    - _ColorIntensity: 19.6
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -138,5 +138,6 @@ Material:
     - _MaskAdjust: {r: -0.1, g: 2.46, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TilingAndOffset: {r: 1, g: 1, b: 0, a: 0}
+    - _TillingAndOffset: {r: 2.23, g: 1.27, b: 0, a: 0}
     - _UVSpeed: {r: 0, g: -0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
