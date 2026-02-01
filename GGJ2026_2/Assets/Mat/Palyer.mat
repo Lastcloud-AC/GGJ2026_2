@@ -105,8 +105,8 @@ Material:
     - _DisplacementStrength: 0
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EdgeColorIntensity: 18.88
-    - _EgdeRange: -0.43
+    - _EdgeColorIntensity: 4.72
+    - _EgdeRange: -0.48
     - _EnvironmentReflections: 1
     - _Float0: 0.01
     - _GlossMapScale: 0
@@ -132,10 +132,11 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EdgeColor: {r: 0, g: 0.9960785, b: 0.9960785, a: 1}
+    - _EdgeColor: {r: 0.11193298, g: 0.7509433, b: 0.7509433, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MainColor: {r: 1, g: 1, b: 1, a: 0}
-    - _MasjAdjust: {r: 0.01, g: 0.42, b: 0, a: 0}
+    - _Fresnel: {r: -0, g: 4.21, b: 5.91, a: 0}
+    - _MainColor: {r: 0.19550726, g: 0.29236594, b: 0.3056603, a: 0}
+    - _MasjAdjust: {r: -0.68, g: 0.42, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Speed: {r: 0, g: -0.09, b: 0, a: 0}
     - _Tilling: {r: 0.5, g: 0.5, b: 0, a: 0}

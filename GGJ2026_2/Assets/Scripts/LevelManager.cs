@@ -23,8 +23,18 @@ public class LevelManager : MonoBehaviour
     public QteController qteController;
     public QteSpriteDisplay qteDisplay;
     public MaskController maskController;
-    public Transform goal;
     public TMP_Text currentQueueText;
+    public Material areaSharedMaterial;
+
+    [System.Serializable]
+    public class AreaEmissiveEntry
+    {
+        public string areaName;
+        public Color emissColor = Color.white;
+    }
+
+    public Color defaultEmissColor = Color.white;
+    public List<AreaEmissiveEntry> areaEmissiveColors = new List<AreaEmissiveEntry>();
 
     [Header("Auto Move")]
     public Vector3 autoStepDirection = Vector3.forward;
@@ -34,7 +44,6 @@ public class LevelManager : MonoBehaviour
     public bool requireQteToUseAreaSequence = true;
 
     [Header("Win Conditions")]
-    public float goalRadius = 0.5f;
     public bool bossDefeated = false;
 
     [Header("Restart")]
@@ -116,6 +125,7 @@ public class LevelManager : MonoBehaviour
         autoMoveDirection = autoStepDirection.normalized;
         previousTimeScale = Time.timeScale;
         UpdateCurrentQueueText(string.Empty, null);
+        ApplyEmissiveForArea(areaTracker != null ? areaTracker.GetAreaNameNow() : string.Empty);
     }
 
     // Update is called once per frameBumped
@@ -175,6 +185,7 @@ public class LevelManager : MonoBehaviour
                 if (areaTracker.EnteredNewArea(out areaName))
                 {
                     autoMoveQueued = false;
+                    ApplyEmissiveForArea(areaName);
                     StartQte(areaName);
                     yield break;
                 }
@@ -188,6 +199,7 @@ public class LevelManager : MonoBehaviour
             if (areaTracker.EnteredNewArea(out areaName))
             {
                 autoMoveQueued = false;
+                ApplyEmissiveForArea(areaName);
                 StartQte(areaName);
                 yield break;
             }
@@ -268,11 +280,6 @@ public class LevelManager : MonoBehaviour
 
     private bool IsLevelComplete()
     {
-        if (goal != null && Vector3.Distance(player.position, goal.position) <= goalRadius)
-        {
-            return true;
-        }
-
         return bossDefeated;
     }
 
@@ -342,7 +349,7 @@ public class LevelManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(areaName) || sequence == null || sequence.Count == 0)
         {
-            currentQueueText.text = "Queue: Up";
+            currentQueueText.text = "Queue: ↑";
             return;
         }
 
@@ -358,6 +365,30 @@ public class LevelManager : MonoBehaviour
         }
 
         currentQueueText.text = sb.ToString();
+    }
+
+    private void ApplyEmissiveForArea(string areaName)
+    {
+        if (areaSharedMaterial == null)
+        {
+            return;
+        }
+
+        Color target = defaultEmissColor;
+        if (!string.IsNullOrEmpty(areaName))
+        {
+            for (int i = 0; i < areaEmissiveColors.Count; i++)
+            {
+                AreaEmissiveEntry entry = areaEmissiveColors[i];
+                if (entry != null && entry.areaName == areaName)
+                {
+                    target = entry.emissColor;
+                    break;
+                }
+            }
+        }
+
+        areaSharedMaterial.SetColor("_EmissColor", target);
     }
 
     private static string QteKeyToArrow(QteController.QteKey key)
