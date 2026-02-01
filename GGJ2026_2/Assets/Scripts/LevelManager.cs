@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
     public MaskController maskController;
     public TMP_Text currentQueueText;
     public Material areaSharedMaterial;
+    public Material playerMat;
 
     [System.Serializable]
     public class AreaEmissiveEntry
@@ -49,6 +50,11 @@ public class LevelManager : MonoBehaviour
     [Header("Restart")]
     public float restartDelay = 1f;
 
+    [Header("Player Dissapear")]
+    public float playerDissapearStart = -0.6f;
+    public float playerDissapearEnd = 0.3f;
+    public float playerDissapearDuration = 0.6f;
+
     private LevelState state = LevelState.Intermission;
     private Vector3 autoMoveDirection = Vector3.forward;
     private bool autoMoveQueued = false;
@@ -62,6 +68,7 @@ public class LevelManager : MonoBehaviour
     private float qteTimeRemaining = 0f;
     private bool qteTimerActive = false;
     private bool restartQueued = false;
+    private Coroutine playerDissapearRoutine = null;
 
     void Start()
     {
@@ -121,11 +128,17 @@ public class LevelManager : MonoBehaviour
             areaTracker.playerCollider = player.GetComponent<CapsuleCollider>();
         }
 
+        if (playerMat != null)
+        {
+            playerMat.SetFloat("_Dissappear", playerDissapearStart);
+        }
         areaTracker.RefreshCurrent();
         autoMoveDirection = autoStepDirection.normalized;
         previousTimeScale = Time.timeScale;
         UpdateCurrentQueueText(string.Empty, null);
         ApplyEmissiveForArea(areaTracker != null ? areaTracker.GetAreaNameNow() : string.Empty);
+
+
     }
 
     // Update is called once per frameBumped
@@ -483,6 +496,7 @@ public class LevelManager : MonoBehaviour
 
         AudioManager.Instance.PlaySfx("Dead");
         Debug.Log("DEADPLAYED");
+        PlayerDead();
 
         if (restartDelay <= 0f)
         {
@@ -492,6 +506,43 @@ public class LevelManager : MonoBehaviour
         }
 
         StartCoroutine(RestartLevelAfterDelay());
+    }
+
+    public void PlayerDead()
+    {
+        if (playerMat == null)
+        {
+            return;
+        }
+
+        if (playerDissapearRoutine != null)
+        {
+            StopCoroutine(playerDissapearRoutine);
+        }
+
+        playerDissapearRoutine = StartCoroutine(SmoothPlayerDissapear());
+    }
+
+    private IEnumerator SmoothPlayerDissapear()
+    {
+        float duration = Mathf.Max(0.01f, playerDissapearDuration);
+        float elapsed = 0f;
+        float startValue = playerDissapearStart;
+        float endValue = playerDissapearEnd;
+
+        playerMat.SetFloat("_Dissappear", startValue);
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float value = Mathf.Lerp(startValue, endValue, t);
+            playerMat.SetFloat("_Dissappear", value);
+            yield return null;
+        }
+
+        playerMat.SetFloat("_Dissappear", endValue);
+        playerDissapearRoutine = null;
     }
 
     private IEnumerator RestartLevelAfterDelay()

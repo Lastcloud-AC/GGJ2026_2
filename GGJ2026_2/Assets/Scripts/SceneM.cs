@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class SceneM : MonoBehaviour
 {
     public int index;
@@ -24,47 +25,58 @@ public class SceneM : MonoBehaviour
         {
             TogglePause();
         }
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            LoadScene1();
+        }
     }
 
     // Update is called once per frame
-    public void SceneLoading()
-    {
-        SceneManager.LoadScene(index);
-    }
+        public void SceneLoading()
+        {
+            SceneManager.LoadScene(index);
+        }
 
-    public void TogglePause()
-    {
-        if (isPaused)
+        public void TogglePause()
         {
-            Resume();
+            if (isPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
         }
-        else
-        {
-            Pause();
-        }
-    }
 
-    public void Pause()
-    {
-        isPaused = true;
-        Time.timeScale = 0f;
-        if (pausePanel != null)
+        public void LoadScene1()
         {
-            pausePanel.SetActive(true);
+            SceneManager.LoadScene(2);
         }
-    }
-    public void BackToHome()
-    {
-        SceneManager.LoadScene(0);
-    }
 
-    public void Resume()
-    {
-        isPaused = false;
-        Time.timeScale = 1f;
-        if (pausePanel != null)
+        public void Pause()
         {
-            pausePanel.SetActive(false);
+            isPaused = true;
+            Time.timeScale = 0f;
+            if (pausePanel != null)
+            {
+                pausePanel.SetActive(true);
+            }
         }
-    }
+
+        public void BackToHome()
+        {
+            SceneManager.LoadScene(0);
+        }
+
+        public void Resume()
+        {
+            isPaused = false;
+            Time.timeScale = 1f;
+            if (pausePanel != null)
+            {
+                pausePanel.SetActive(false);
+            }
+        }
 }

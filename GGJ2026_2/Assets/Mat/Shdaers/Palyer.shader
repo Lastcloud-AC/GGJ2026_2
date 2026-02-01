@@ -9,13 +9,14 @@ Shader "Palyer"
 		_MainTex( "MainTex", 2D ) = "white" {}
 		_ClipThreshold( "Clip Threshold", Range( 0, 1 ) ) = 0
 		_Tilling( "Tilling", Vector ) = ( 1, 1, 0, 0 )
-		_MasjAdjust( "MasjAdjust", Vector ) = ( 0, 1, 0, 0 )
+		_MaskAdjust( "MaskAdjust", Vector ) = ( 0, 1, 0, 0 )
 		_Speed( "Speed", Vector ) = ( 0, 0, 0, 0 )
 		_MainColor( "MainColor", Color ) = ( 1, 0.08867919, 0.08867919, 0 )
 		_EgdeRange( "EgdeRange", Float ) = 0
 		_EdgeColor( "EdgeColor", Color ) = ( 0, 0, 0, 0 )
 		_EdgeColorIntensity( "EdgeColorIntensity", Float ) = 5
 		_Fresnel( "Fresnel", Vector ) = ( 1, 1, 1, 0 )
+		_Dissappear( "Dissappear", Range( -0.6, 0.3 ) ) = 0
 
 
 		//_TessPhongStrength( "Tess Phong Strength", Range( 0, 1 ) ) = 0.5
@@ -293,9 +294,10 @@ Shader "Palyer"
 			float4 _Fresnel;
 			float4 _EdgeColor;
 			float4 _MainColor;
-			float2 _MasjAdjust;
+			float2 _MaskAdjust;
 			float2 _Speed;
 			float2 _Tilling;
+			float _Dissappear;
 			float _EgdeRange;
 			float _ClipThreshold;
 			float _EdgeColorIntensity;
@@ -541,7 +543,7 @@ Shader "Palyer"
 				simplePerlin2D76 = simplePerlin2D76*0.5 + 0.5;
 				float3 objToWorld16 = mul( GetObjectToWorldMatrix(), float4( float3( 0,0,0 ), 1 ) ).xyz;
 				float4 appendResult19 = (float4(WorldPosition.x , WorldPosition.y , 0.0 , 0.0));
-				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _MasjAdjust.x + ( WorldPosition.y - objToWorld16.y ) ) / _MasjAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
+				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _Dissappear + ( WorldPosition.y - objToWorld16.y ) ) / _MaskAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
 				float temp_output_40_0 = saturate( step( 0.4 , ( 1.0 - distance( temp_output_36_0 , ( _EgdeRange + _ClipThreshold ) ) ) ) );
 				float4 lerpResult49 = lerp( ( simplePerlin2D76 * _MainColor ) , ( ( _EdgeColor * temp_output_40_0 ) * _EdgeColorIntensity ) , temp_output_40_0);
 				
@@ -685,9 +687,10 @@ Shader "Palyer"
 			float4 _Fresnel;
 			float4 _EdgeColor;
 			float4 _MainColor;
-			float2 _MasjAdjust;
+			float2 _MaskAdjust;
 			float2 _Speed;
 			float2 _Tilling;
+			float _Dissappear;
 			float _EgdeRange;
 			float _ClipThreshold;
 			float _EdgeColorIntensity;
@@ -872,7 +875,7 @@ Shader "Palyer"
 
 				float3 objToWorld16 = mul( GetObjectToWorldMatrix(), float4( float3( 0,0,0 ), 1 ) ).xyz;
 				float4 appendResult19 = (float4(WorldPosition.x , WorldPosition.y , 0.0 , 0.0));
-				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _MasjAdjust.x + ( WorldPosition.y - objToWorld16.y ) ) / _MasjAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
+				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _Dissappear + ( WorldPosition.y - objToWorld16.y ) ) / _MaskAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
 				
 
 				float Alpha = temp_output_36_0;
@@ -985,9 +988,10 @@ Shader "Palyer"
 			float4 _Fresnel;
 			float4 _EdgeColor;
 			float4 _MainColor;
-			float2 _MasjAdjust;
+			float2 _MaskAdjust;
 			float2 _Speed;
 			float2 _Tilling;
+			float _Dissappear;
 			float _EgdeRange;
 			float _ClipThreshold;
 			float _EdgeColorIntensity;
@@ -1151,7 +1155,7 @@ Shader "Palyer"
 
 				float3 objToWorld16 = mul( GetObjectToWorldMatrix(), float4( float3( 0,0,0 ), 1 ) ).xyz;
 				float4 appendResult19 = (float4(WorldPosition.x , WorldPosition.y , 0.0 , 0.0));
-				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _MasjAdjust.x + ( WorldPosition.y - objToWorld16.y ) ) / _MasjAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
+				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _Dissappear + ( WorldPosition.y - objToWorld16.y ) ) / _MaskAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
 				
 
 				float Alpha = temp_output_36_0;
@@ -1258,9 +1262,10 @@ Shader "Palyer"
 			float4 _Fresnel;
 			float4 _EdgeColor;
 			float4 _MainColor;
-			float2 _MasjAdjust;
+			float2 _MaskAdjust;
 			float2 _Speed;
 			float2 _Tilling;
+			float _Dissappear;
 			float _EgdeRange;
 			float _ClipThreshold;
 			float _EdgeColorIntensity;
@@ -1412,7 +1417,7 @@ Shader "Palyer"
 				float3 ase_positionWS = input.ase_texcoord.xyz;
 				float3 objToWorld16 = mul( GetObjectToWorldMatrix(), float4( float3( 0,0,0 ), 1 ) ).xyz;
 				float4 appendResult19 = (float4(ase_positionWS.x , ase_positionWS.y , 0.0 , 0.0));
-				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _MasjAdjust.x + ( ase_positionWS.y - objToWorld16.y ) ) / _MasjAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
+				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _Dissappear + ( ase_positionWS.y - objToWorld16.y ) ) / _MaskAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
 				
 
 				surfaceDescription.Alpha = temp_output_36_0;
@@ -1516,9 +1521,10 @@ Shader "Palyer"
 			float4 _Fresnel;
 			float4 _EdgeColor;
 			float4 _MainColor;
-			float2 _MasjAdjust;
+			float2 _MaskAdjust;
 			float2 _Speed;
 			float2 _Tilling;
+			float _Dissappear;
 			float _EgdeRange;
 			float _ClipThreshold;
 			float _EdgeColorIntensity;
@@ -1667,7 +1673,7 @@ Shader "Palyer"
 				float3 ase_positionWS = input.ase_texcoord.xyz;
 				float3 objToWorld16 = mul( GetObjectToWorldMatrix(), float4( float3( 0,0,0 ), 1 ) ).xyz;
 				float4 appendResult19 = (float4(ase_positionWS.x , ase_positionWS.y , 0.0 , 0.0));
-				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _MasjAdjust.x + ( ase_positionWS.y - objToWorld16.y ) ) / _MasjAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
+				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _Dissappear + ( ase_positionWS.y - objToWorld16.y ) ) / _MaskAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
 				
 
 				surfaceDescription.Alpha = temp_output_36_0;
@@ -1794,9 +1800,10 @@ Shader "Palyer"
 			float4 _Fresnel;
 			float4 _EdgeColor;
 			float4 _MainColor;
-			float2 _MasjAdjust;
+			float2 _MaskAdjust;
 			float2 _Speed;
 			float2 _Tilling;
+			float _Dissappear;
 			float _EgdeRange;
 			float _ClipThreshold;
 			float _EdgeColorIntensity;
@@ -1953,7 +1960,7 @@ Shader "Palyer"
 
 				float3 objToWorld16 = mul( GetObjectToWorldMatrix(), float4( float3( 0,0,0 ), 1 ) ).xyz;
 				float4 appendResult19 = (float4(WorldPosition.x , WorldPosition.y , 0.0 , 0.0));
-				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _MasjAdjust.x + ( WorldPosition.y - objToWorld16.y ) ) / _MasjAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
+				float temp_output_36_0 = saturate( ( ( 1.0 - ( ( _Dissappear + ( WorldPosition.y - objToWorld16.y ) ) / _MaskAdjust.y ) ) - tex2D( _MainTex, ( float4( ( _Speed * _TimeParameters.x ), 0.0 , 0.0 ) + ( float4( _Tilling, 0.0 , 0.0 ) * appendResult19 ) ).xy ).r ) );
 				
 
 				float Alpha = temp_output_36_0;
@@ -2008,13 +2015,14 @@ Node;AmplifyShaderEditor.TransformPositionNode, AmplifyShaderEditor, Version=0.0
 Node;AmplifyShaderEditor.PositionNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;14;-1456,-208;Inherit;False;1;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.DynamicAppendNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;19;-1072,-272;Inherit;False;FLOAT4;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.SimpleSubtractOpNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;17;-1136,16;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.Vector2Node, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;25;-960,64;Inherit;False;Property;_MasjAdjust;MasjAdjust;3;0;Create;True;0;0;0;False;0;False;0,1;0,1;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.Vector2Node, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;31;-850.3741,-178.922;Inherit;False;Property;_Speed;Speed;4;0;Create;True;0;0;0;False;0;False;0,0;0,0;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.SimpleTimeNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;32;-768,-96;Inherit;False;1;0;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.Vector2Node, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;23;-1152,-448;Inherit;False;Property;_Tilling;Tilling;2;0;Create;True;0;0;0;False;0;False;1,1;0,0;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
-Node;AmplifyShaderEditor.SimpleAddOpNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;26;-704,-16;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;85;-944,0;Inherit;False;Property;_Dissappear;Dissappear;10;0;Create;True;0;0;0;False;0;False;0;0;-0.6;0.3;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;24;-784,-304;Inherit;False;2;2;0;FLOAT2;0,0;False;1;FLOAT4;0,0,0,0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;33;-592,-208;Inherit;False;2;2;0;FLOAT2;0,0;False;1;FLOAT;0;False;1;FLOAT2;0
+Node;AmplifyShaderEditor.SimpleAddOpNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;26;-656,64;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.Vector2Node, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;25;-720,224;Inherit;False;Property;_MaskAdjust;MaskAdjust;3;0;Create;True;0;0;0;False;0;False;0,1;0,1;0;3;FLOAT2;0;FLOAT;1;FLOAT;2
 Node;AmplifyShaderEditor.SimpleAddOpNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;30;-336,-304;Inherit;False;2;2;0;FLOAT2;0,0;False;1;FLOAT4;0,0,0,0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.SimpleDivideOpNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;27;-384,-80;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SamplerNode, AmplifyShaderEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null;11;-48,-368;Inherit;True;Property;_MainTex;MainTex;0;0;Create;True;0;0;0;False;0;False;-1;aaef3ddb7c776b142a1d7dc2fdfcc462;aaef3ddb7c776b142a1d7dc2fdfcc462;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
@@ -2065,12 +2073,12 @@ WireConnection;19;0;14;1
 WireConnection;19;1;14;2
 WireConnection;17;0;14;2
 WireConnection;17;1;16;2
-WireConnection;26;0;25;1
-WireConnection;26;1;17;0
 WireConnection;24;0;23;0
 WireConnection;24;1;19;0
 WireConnection;33;0;31;0
 WireConnection;33;1;32;0
+WireConnection;26;0;85;0
+WireConnection;26;1;17;0
 WireConnection;30;0;33;0
 WireConnection;30;1;24;0
 WireConnection;27;0;26;0
@@ -2118,4 +2126,4 @@ WireConnection;61;2;74;0
 WireConnection;61;3;36;0
 WireConnection;61;4;22;0
 ASEEND*/
-//CHKSM=DA117BDB4FF163E6CB4EE51235922F6A2691A62B
+//CHKSM=375BA7E7CCD18F6965C578B1AD9A5386A167D2C6

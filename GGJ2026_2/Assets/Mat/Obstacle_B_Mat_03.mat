@@ -116,9 +116,12 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _LightBool: 1
+    - _LightInfluence: 0.41
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _PosterizeSteps: 9.1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
@@ -135,7 +138,7 @@ Material:
     - _Color: {r: 0.19245279, g: 0.19136344, b: 0.19136344, a: 1}
     - _EmissColor: {r: 0.2905661, g: 0.2905661, b: 0.2905661, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FlashSpeed: {r: 0.5, g: 0, b: 0, a: 0}
+    - _FlashSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _MainColor: {r: 0.23529413, g: 0.23529413, b: 0.23529413, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TilingAndOffset: {r: 1, g: 1, b: 0, a: 0}

@@ -103,6 +103,7 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DisplacementStrength: 0
+    - _Dissappear: -0.6
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EdgeColorIntensity: 4.72
@@ -136,7 +137,8 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Fresnel: {r: -0, g: 4.21, b: 5.91, a: 0}
     - _MainColor: {r: 0.19550726, g: 0.29236594, b: 0.3056603, a: 0}
-    - _MasjAdjust: {r: -0.68, g: 0.42, b: 0, a: 0}
+    - _MasjAdjust: {r: -0.46, g: 0.42, b: 0, a: 0}
+    - _MaskAdjust: {r: 0, g: 0.14, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Speed: {r: 0, g: -0.09, b: 0, a: 0}
     - _Tilling: {r: 0.5, g: 0.5, b: 0, a: 0}
